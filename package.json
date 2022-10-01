@@ -1,0 +1,14 @@
+{
+  "name": "twitter-bot",
+  "version": "1.0.0",
+  "description": "Bot to get followers",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Camilo Saa",
+  "license": "ISC",
+  "dependencies": {
+    "twitter-api-v2": "^1.12.7"
+  }
+}
