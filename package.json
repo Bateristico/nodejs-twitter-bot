@@ -9,6 +9,7 @@
   "author": "Camilo Saa",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "twitter-api-v2": "^1.12.7"
   }
 }
