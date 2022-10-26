@@ -1,5 +1,10 @@
 require('dotenv').config();
 const axios = require('axios');
+const T = require('./Twit');
+const my_user_name = 'Wateristico';
+
+const timeout = 1000 * 60 * 5; // timeout to send the message 5 min
+
 const { BEARER_TOKEN } = process.env;
 const MAX_RESULTS = 1000;
 
@@ -28,7 +33,6 @@ async function getUserById(userId) {
  * @returns {Object}
  */
 async function getFollowersById(userId, cursor) {
-  let followerList;
   let fetchUrl;
   console.log(`function called for user ${userId} and cursor: ${cursor}`);
 
@@ -39,23 +43,31 @@ async function getFollowersById(userId, cursor) {
   }
 
   try {
+    console.log(`fetch to ${fetchUrl} and pagination ${cursor}`);
     const response = await axios.get(fetchUrl, config);
-    followerList = { ...followerList, ...response.data };
+    return response.data;
   } catch (error) {
     console.error('there was an error fetching', error);
   }
-
-  //   console.log(followerList);
-
-  //   // checks if there is a pagination token
-  //   const paginationToken = response.data.meta.next_token;
-  //   if (paginationToken) {
-  //     cursor = paginationToken;
-  //     console.log('RECURSIVE CALL with cursor', cursor);
-  //     getFollowersById(userId, cursor);
-  //   }
-
-  return followerList;
 }
 
-module.exports = { getUserById, getFollowersById };
+/**
+ * Sends a DM to a given twitter account name
+ */
+async function sendDM() {
+  console.log('calling sendDM function');
+  const screen_name = 'wateristico';
+  const obj = {
+    screen_name,
+    text: 'Automated DM test'
+  };
+
+  T.post('direct_messages/new', obj)
+    .catch(err => {
+      console.error('error', err.stack);
+    })
+    .then(result => {
+      console.log(`Message sent successfully To  ${screen_name}  💪💪`);
+    });
+}
+module.exports = { getFollowersById, sendDM };

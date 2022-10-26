@@ -16,7 +16,8 @@ async function convertToXlxs(followers) {
     type: 'binary'
   });
 
-  XLSX.writeFile(workbook, 'followers list.xlsx');
+  XLSX.writeFile(workbook, `followers list${Math.floor(Math.random() * 500)}.xlsx`);
+  // XLSX.writeFile(workbook, `followers list 2.xlsx`);
 }
 
 module.exports = convertToXlxs;
