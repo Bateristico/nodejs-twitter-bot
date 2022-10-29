@@ -1,12 +1,19 @@
 require('dotenv').config();
 const axios = require('axios');
-const T = require('./Twit');
-const my_user_name = 'Wateristico';
 
 const timeout = 1000 * 60 * 5; // timeout to send the message 5 min
 
 const { BEARER_TOKEN } = process.env;
 const MAX_RESULTS = 1000;
+
+const message = {
+  text: `¡Hola ${userName}}! ¿Qué tal? Soy Constanza, estudiante de Ciencia Política. \nEstoy realizando un estudio de opinión de los hinchas de fútbol, y quería pedirte por favor si puedes contestar la siguiente encuesta: \nhttps://forms.gle/sp6o6ZMhvhwim5eb7 \nDudas a tesis.cipol@gmail.com'`
+};
+const polls = [
+  'https://forms.gle/sp6o6ZMhvhwim5eb7',
+  'https://forms.gle/EmDe75UL9wDCojjo8',
+  'https://forms.gle/NbvA9ogyRccqZ6WD6'
+];
 
 const baseUrl = 'https://api.twitter.com/2/users';
 const config = {
@@ -52,6 +59,13 @@ async function getFollowersById(userId, cursor) {
 }
 
 /**
+ * Post a tweet and tags a user
+ */
+async function postTweet(followers) {
+  console.log('post tweet for', followers);
+}
+
+/**
  * Sends a DM to a given twitter account name
  */
 async function sendDM() {
@@ -70,4 +84,4 @@ async function sendDM() {
       console.log(`Message sent successfully To  ${screen_name}  💪💪`);
     });
 }
-module.exports = { getFollowersById, sendDM };
+module.exports = { getFollowersById, sendDM, postTweet };
