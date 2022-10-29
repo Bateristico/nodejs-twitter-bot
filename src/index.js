@@ -8,10 +8,9 @@ let followers;
 
 async function callAPI(cursor) {
   followers = await getFollowersById(userId, cursor);
-  console.log(followers);
   console.log('Creating post...');
   // await convertToXlxs(followers);
-  await postTweet(followers);
+  await postTweet(followers.data);
   if (followers.meta.next_token) {
     cursor = followers.meta.next_token;
     await callAPI(cursor);
