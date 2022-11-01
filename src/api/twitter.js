@@ -1,7 +1,9 @@
 require('dotenv').config();
 const axios = require('axios');
-
-const timeout = 1000 * 60 * 5; // timeout to send the message 5 min
+const twit = require('twit');
+const tConfig = require('./config');
+const Twit = new twit(tConfig);
+// const timeout = 1000 * 60 * 5; // timeout to send the message 5 min
 
 const { BEARER_TOKEN } = process.env;
 const MAX_RESULTS = 1000;
@@ -50,6 +52,7 @@ async function getFollowersById(userId, cursor) {
 
   try {
     console.log(`fetch to ${fetchUrl} and pagination ${cursor}`);
+
     const response = await axios.get(fetchUrl, config);
     return response.data;
   } catch (error) {
@@ -71,13 +74,21 @@ async function getFollowersById(userId, cursor) {
  * @param {Array<follower>} followers list of followers
  */
 async function postTweet(followers) {
-  followers.map(async follower => {
-    console.log('Tweet tagging...', follower.username);
-    const randomPoll = polls[Math.floor(Math.random() * polls.length)];
-    const text = `¡Hola ${follower.username}!\n ¿Qué tal? Soy Constanza, estudiante de Ciencia Política\n. Estoy realizando un estudio de opinión de los hinchas de fútbol, y quería pedirte por favor si puedes contestar la siguiente encuesta: ${randomPoll} \n Dudas a tesis.cipol@gmail.com`;
-    console.log(text);
-    // const response = await axios.post(`${baseUrl}/tweets`, config);
-  });
+  const tagById = await Promise.all(
+    followers.map(async follower => {
+      console.log('Tweet tagging...', follower.username);
+      const randomPoll = polls[Math.floor(Math.random() * polls.length)];
+      const text = `¡Hola ${follower.username}!\n ¿Qué tal? Soy Constanza, estudiante de Ciencia Política\n. Estoy realizando un estudio de opinión de los hinchas de fútbol, y quería pedirte por favor si puedes contestar la siguiente encuesta: ${randomPoll} \n Dudas a tesis.cipol@gmail.com`;
+      console.log('twitte tagging', follower.username);
+      config.text = text;
+      try {
+        const response = await axios.post(`${baseUrl}/tweets`, config);
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+    })
+  );
 }
 
 /**
